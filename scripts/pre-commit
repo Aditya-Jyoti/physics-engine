@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -e
+
+# Get staged C++ source/header files
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(cpp|hpp)$' || true)
+
+# If no relevant files, exit cleanly
+if [ -z "$FILES" ]; then
+    exit 0
+fi
+
+echo "Running clang-format on staged files..."
+
+clang-format -i $FILES
+
+# Re-stage formatted files
+git add $FILES
+
+echo "clang-format completed"
