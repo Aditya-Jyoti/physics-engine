@@ -3,10 +3,15 @@ PROJECT_NAME := physics-engine
 VERSION := 0.0.1
 AUTHOR := Aditya Jyoti
 
+# include libraries
+SDL2_CFLAGS := $(shell sdl2-config --cflags)
+SDL2_LIBS   := $(shell sdl2-config --libs)
+
 # compiler settings
 CXX := g++
 CXXVERSION := c++20
-CXXFLAGS := -Wall -Wextra -Werror -std=${CXXVERSION} -MMD -MP
+CXXFLAGS := -Wall -Wextra -Werror -std=${CXXVERSION} -MMD -MP ${SDL2_CFLAGS}
+LDFLAGS  := ${SDL2_LIBS}
 
 # directories 
 SRC_DIR := ${PROJECT_NAME}/src
@@ -32,7 +37,7 @@ all: ${TARGET}
 # $@ - target
 # $^ - obj_files
 ${TARGET}: ${OBJ_FILES} 
-	${CXX} ${CXXFLAGS} -o $@ $^ 
+	${CXX} $^ -o $@ ${LDFLAGS}
 
 # $< - source file
 ${OBJ_DIR}/%.o: ${SRC_DIR}/%.cpp
